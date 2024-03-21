@@ -1,9 +1,9 @@
-import './Header.scss';
+import styles from './Header.module.scss';
 
 function Header() {
   return (
-    <header className="header">
-      <h1 className="header-title">Démineur</h1>
+    <header className={styles.header}>
+      <h1 className={styles.title}>Démineur</h1>
     </header>
   );
 }

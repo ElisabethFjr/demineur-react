@@ -1,12 +1,11 @@
 @import '../../styles/variables';
 
-.footer {
+.header {
   display: flex;
   align-items: center;
   height: 8rem;
-
-  &-text {
-    padding-top: 2.5rem;
-    font-size: 0.9rem;
+  .title {
+    font-family: 'Press Start 2P';
+    color: $blueLight;
   }
 }

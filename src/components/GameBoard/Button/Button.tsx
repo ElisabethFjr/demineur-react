@@ -1,9 +1,9 @@
-import './Button.scss';
+import styles from './Button.module.scss';
 
 function Button() {
   return (
-    <div className="btn-container">
-      <button type="button" className="btn">
+    <div className={styles.container}>
+      <button type="button" className={styles.btn}>
         Reset
       </button>
     </div>

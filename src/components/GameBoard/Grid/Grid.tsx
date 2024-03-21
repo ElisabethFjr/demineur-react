@@ -1,6 +1,6 @@
 /* eslint-disable no-plusplus */
 import Cell from '../Cell/Cell';
-import './Grid.scss';
+import styles from './Grid.module.scss';
 
 function Grid() {
   const rows = 9;
@@ -12,7 +12,7 @@ function Grid() {
     }
   }
 
-  return <div className="grid">{grid}</div>;
+  return <div className={styles.grid}>{grid}</div>;
 }
 
 export default Grid;

@@ -1,7 +1,7 @@
-import './Cell.scss';
+import styles from './Cell.module.scss';
 
 function Cell() {
-  return <div className="cell" />;
+  return <div className={styles.cell} />;
 }
 
 export default Cell;

@@ -1,9 +1,9 @@
-import './Footer.scss';
+import styles from './Footer.module.scss';
 
 function Footer() {
   return (
-    <footer className="footer">
-      <p className="footer-text">Réalisé avec React - 2024 ©</p>
+    <footer className={styles.footer}>
+      <p className={styles.text}>Réalisé avec React - 2024 ©</p>
     </footer>
   );
 }
