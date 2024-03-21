@@ -1,10 +1,11 @@
-@use 'reset';
-@use 'variables' as v;
+@import 'reset';
+@import 'variables';
+@import 'fonts';
 
 body {
   margin: 0;
-  font-family: v.$font;
+  font-family: 'Roboto Mono';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: v.$colorText;
+  color: $blueLight;
 }

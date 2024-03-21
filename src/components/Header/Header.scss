@@ -1,0 +1,11 @@
+@import '../../styles/variables';
+
+.header {
+  display: flex;
+  align-items: center;
+  height: 8rem;
+  &-title {
+    font-family: 'Press Start 2P';
+    color: $blueLight;
+  }
+}

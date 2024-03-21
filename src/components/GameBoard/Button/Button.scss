@@ -1,0 +1,30 @@
+@import '../../../styles/variables';
+
+.btn-container {
+  display: flex;
+  justify-content: center;
+}
+.btn {
+  text-transform: uppercase;
+  width: 97px;
+  height: 50px;
+  padding: 0.4rem 1.2rem;
+  background-color: $blueLight;
+  color: $blueDark;
+  font-weight: 700;
+  border-bottom: 5px inset rgba(13, 15, 24, 0.5);
+  border-left: 5px inset rgba(13, 15, 24, 0.5);
+  border-right: 5px inset rgba(222, 223, 243, 0.5);
+  border-top: 5px inset rgba(222, 223, 243, 0.5);
+  transition: background-color 0.3s ease-in-out;
+  transition: border 0.1s ease-in;
+  &:hover {
+    background-color: $blueLightest;
+  }
+  &:active {
+    border-bottom: 3px inset rgba(13, 15, 24, 0.5);
+    border-left: 3px inset rgba(13, 15, 24, 0.5);
+    border-right: 3px inset rgba(222, 223, 243, 0.5);
+    border-top: 3px inset rgba(222, 223, 243, 0.5);
+  }
+}

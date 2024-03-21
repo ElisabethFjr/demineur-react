@@ -1,14 +1,12 @@
 // COLORS
-$hiddenCellDark: #191b2d;
-$hiddenCellLight: #171928;
-$revealdeCellDark: #35374b;
-$revealdeCellLight: #393b50;
+$blueLight: #dedff3;
+$blueLightest: lighten($blueLight, 6%);
+$blueDark: #0d0f18;
+$hiddenCell: #1e2035;
+$revealedCell: #393b50;
 $colorOne: #48cafb;
 $colorTwo: #00ff77;
 $colorThree: #9000ff;
 $colorFour: #fd00d3;
+$colorFive: #ff7f00;
 $colorFlag: #ec1c24;
-$colorText: #dedff3;
-
-// FONT
-$font: 'Roboto Mono';

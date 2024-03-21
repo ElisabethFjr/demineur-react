@@ -1,0 +1,86 @@
+@import '../../styles/variables';
+
+.gameboard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2rem;
+
+  // -- HEADER --
+  .header {
+    position: relative;
+    display: grid;
+    grid-template-columns: 2fr 1fr 2fr;
+    align-items: center;
+    color: $blueLight;
+    // SELECTOR
+    .selector {
+      position: relative;
+      font-size: 0.9rem;
+      .level {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        width: 7.2rem;
+        padding: 0.1rem 0.4rem;
+        border: 1px inset $blueLight;
+        background-color: $blueDark;
+        color: $blueLight;
+        text-transform: capitalize;
+      }
+      .options {
+        position: absolute;
+        display: none;
+        flex-direction: column;
+        border: 1px inset $blueLight;
+        background-color: $blueDark;
+        color: $blueLight;
+        width: 7.2rem;
+        .option {
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          width: 100%;
+
+          &:hover {
+            background-color: $revealedCell;
+          }
+          &.selected {
+            background-color: $revealedCell;
+          }
+          .input[type='radio'] {
+            appearance: none;
+            cursor: pointer;
+          }
+          .label {
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            text-transform: capitalize;
+            padding: 0.1rem 0.4rem;
+          }
+        }
+        &.open {
+          display: flex;
+        }
+      }
+    }
+    // TIMER
+    .timer {
+      margin: 0 auto;
+      font-size: 1.2rem;
+    }
+    // COUNTER
+    .counter {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: flex-end;
+    }
+  }
+
+  // -- SCORE --
+  .score {
+    display: none;
+  }
+}

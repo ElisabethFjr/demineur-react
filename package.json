@@ -11,7 +11,9 @@
 		"lint:fix": "eslint src/**/*.{js,jsx,ts,tsx} --fix"
 	},
 	"dependencies": {
+		"bootstrap": "^4.6.0",
 		"react": "^18.2.0",
+		"react-bootstrap-icons": "^1.11.3",
 		"react-dom": "^18.2.0"
 	},
 	"devDependencies": {
