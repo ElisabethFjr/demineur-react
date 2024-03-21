@@ -1,7 +1,12 @@
 @import '../../../styles/variables';
 
 .cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
   height: auto;
   background-color: $hiddenCell;
+  border: none;
+  cursor: default;
 }

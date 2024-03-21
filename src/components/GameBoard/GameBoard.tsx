@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FlagFill, ChevronDown } from 'react-bootstrap-icons';
 import Button from './Button/Button';
 import Grid from './Grid/Grid';
 import { Level } from '../../@types';
 import styles from './GameBoard.module.scss';
+import { initializeGrid, placeRandomBombs } from '../../utils/gameFunctions';
 
 // --- Levels ARRAY ---
 const levels: Level[] = [
@@ -16,6 +17,11 @@ function GameBoard() {
   // --- STATES VARIABLES ---
   const [selectedLevel, setSelectedLevel] = useState<Level>(levels[0]);
   const [isLevelMenuOpen, setIsLevelMenuOpen] = useState<boolean>(false);
+  const [gameStatus, setGameStatus] = useState<number>(0); // 0 = waiting | 1 = start game | 2 = win | -1 = game over | 3 = restart
+  const [timer, setTimer] = useState<number>(0);
+  const [grid, setGrid] = useState<boolean[][]>(
+    initializeGrid(selectedLevel.rows, selectedLevel.cols)
+  );
 
   // --- EVENT HANDLING ---
   // Toggle the Select Level Menu on Click
@@ -27,6 +33,62 @@ function GameBoard() {
   const handleLevelChange = (level: Level) => {
     setSelectedLevel(level);
     setIsLevelMenuOpen(false);
+    // Reset game status to waiting (0)
+    setGameStatus(0);
+    // Reset the grid to empty without bombs
+    setGrid(initializeGrid(level.rows, level.cols));
+  };
+
+  // --- TIMER ---
+  // Controls the game timer based on the game status
+  useEffect(() => {
+    let intervalId: number | undefined; // Variable to store the interval ID
+    if (gameStatus === 1) {
+      intervalId = setInterval(() => {
+        setTimer((prevTimer) => prevTimer + 1); // Increment the timer by 1 second
+      }, 1000); // Timer interval set to 1000 milliseconds (1 second)
+    } else if (gameStatus === -1 || gameStatus === 2 || gameStatus === 3) {
+      clearInterval(intervalId); // Clear the interval to stop the timer
+    }
+    // Cleanup function to clear the interval when the component unmounts or when game status changes
+    return () => clearInterval(intervalId);
+  }, [gameStatus]);
+
+  // Convert seconds to MIN:SEC format (00:00)
+  const formatTime = (time: number): string => {
+    const min = Math.floor(time / 60);
+    const sec = time % 60;
+    return `${min < 10 ? '0' : ''}${min}:${sec < 10 ? '0' : ''}${sec}`;
+  };
+
+  // --- GAME FUNTIONS ---
+  // Function to start the game when a cell is clicked
+  const startGame = (rowClicked: number, colClicked: number) => {
+    // Place random bombs when a cell is clicked, only if game status is 0 (waiting)
+    if (gameStatus === 0) {
+      placeRandomBombs(
+        grid,
+        selectedLevel.bombs,
+        selectedLevel.rows,
+        selectedLevel.cols,
+        rowClicked,
+        colClicked,
+        setGrid
+      );
+      // Update game status to started (1)
+      setGameStatus(1);
+    }
+  };
+
+  // Function to reset the game
+  const resetGame = () => {
+    console.log('RESET GAME');
+    // Reset game status to waiting (0)
+    setGameStatus(0);
+    // Reset the grid to empty without bombs
+    setGrid(initializeGrid(selectedLevel.rows, selectedLevel.cols));
+    // Reset Timer
+    setTimer(0);
   };
 
   return (
@@ -69,15 +131,15 @@ function GameBoard() {
             ))}
           </ul>
         </div>
-        <div className={styles.timer}>0:00</div>
+        <div className={styles.timer}>{formatTime(timer)}</div>
         <div className={styles.counter}>
           <p>{selectedLevel.bombs}</p>
           <FlagFill color="#ec1c24" size={22} />
         </div>
       </div>
-      <Grid level={selectedLevel} />
+      <Grid level={selectedLevel} grid={grid} startGame={startGame} />
       <div className={styles.score}>Score</div>
-      <Button />
+      <Button resetGame={resetGame} />
     </div>
   );
 }

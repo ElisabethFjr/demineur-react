@@ -3,18 +3,32 @@ import Cell from '../Cell/Cell';
 import { Level } from '../../../@types';
 import styles from './Grid.module.scss';
 
-function Grid({ level }: { level: Level }) {
+function Grid({
+  level,
+  grid,
+  startGame,
+}: {
+  level: Level;
+  grid: boolean[][];
+  startGame: (rowClicked: number, colClicked: number) => void;
+}) {
   const { value, rows, cols } = level;
 
-  // Generate the Grid of Cells based on Level's rows & cols
-  const grid = [];
+  // Render the grid cells with random Bombs
+  const renderedGrid = [];
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
-      grid.push(<Cell key={`${row}-${col}`} />);
+      renderedGrid.push(
+        <Cell
+          key={`${row}-${col}`}
+          isBomb={grid[row][col]}
+          handleClick={() => startGame(row, col)}
+        />
+      );
     }
   }
 
-  // Get the special class (template col & row) based on the level value
+  // STYLE SCSS -- Get the grid class based on the selected level
   let gridClass = '';
   if (value === 'facile') {
     gridClass = styles.facile;
@@ -24,7 +38,7 @@ function Grid({ level }: { level: Level }) {
     gridClass = styles.difficile;
   }
 
-  return <div className={`${styles.grid} ${gridClass}`}>{grid}</div>;
+  return <div className={`${styles.grid} ${gridClass}`}>{renderedGrid}</div>;
 }
 
 export default Grid;
