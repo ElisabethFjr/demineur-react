@@ -9,4 +9,19 @@
   background-color: $hiddenCell;
   border: none;
   cursor: default;
+  &.one {
+    color: $colorOne;
+  }
+  &.two {
+    color: $colorTwo;
+  }
+  &.three {
+    color: $colorThree;
+  }
+  &.four {
+    color: $colorFour;
+  }
+  &.five {
+    color: $colorFive;
+  }
 }

@@ -18,7 +18,7 @@ function App() {
   // - Si nb drapreaux = nb bombes => plus possible de poser de drapeaux
 
   // 5. Gestion victoire : si toutes les cases non minées sont affichéees + nb drapeaux === nb mines alors VICTOIRE GAME STATUS === 3 (gagné)
-  // Afficher le score : temps et à côté les meilleurs scores effectués (ccréer un tableau de score vide)
+  // Afficher le score : temps et à côté les meilleurs scores effectués (ccréer un tableau de score vide et ajouter les scores à chaque fois qu'une game est gagnée)
 
   return (
     <div className="app">

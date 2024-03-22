@@ -4,7 +4,7 @@ import Button from './Button/Button';
 import Grid from './Grid/Grid';
 import { Level } from '../../@types';
 import styles from './GameBoard.module.scss';
-import { initializeGrid, placeRandomBombs } from '../../utils/gameFunctions';
+import { initializeGrid, placeRandomBombs, formatTime } from '../../utils/game';
 
 // --- Levels ARRAY ---
 const levels: Level[] = [
@@ -54,13 +54,6 @@ function GameBoard() {
     return () => clearInterval(intervalId);
   }, [gameStatus]);
 
-  // Convert seconds to MIN:SEC format (00:00)
-  const formatTime = (time: number): string => {
-    const min = Math.floor(time / 60);
-    const sec = time % 60;
-    return `${min < 10 ? '0' : ''}${min}:${sec < 10 ? '0' : ''}${sec}`;
-  };
-
   // --- GAME FUNTIONS ---
   // Function to start the game when a cell is clicked
   const startGame = (rowClicked: number, colClicked: number) => {
@@ -82,7 +75,6 @@ function GameBoard() {
 
   // Function to reset the game
   const resetGame = () => {
-    console.log('RESET GAME');
     // Reset game status to waiting (0)
     setGameStatus(0);
     // Reset the grid to empty without bombs

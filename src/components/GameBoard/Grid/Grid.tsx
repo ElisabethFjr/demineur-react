@@ -14,14 +14,40 @@ function Grid({
 }) {
   const { value, rows, cols } = level;
 
+  // Function to count the number of adjacent bombs for a cell
+  const countAdjacentBombs = (row: number, col: number): number => {
+    let count = 0;
+    // For every cell around the current cell
+    for (let i = row - 1; i <= row + 1; i++) {
+      for (let j = col - 1; j <= col + 1; j++) {
+        // Check if the adjacent cell is inside the grid and is not the current cell
+        if (
+          i >= 0 &&
+          i < rows &&
+          j >= 0 &&
+          j < cols &&
+          !(i === row && j === col)
+        ) {
+          // If the adjacent cell contains a bomb (= true), increment the count of adjacent bombs
+          if (grid[i][j]) {
+            count++; // Return the count of adjacent bombs for the current cell
+          }
+        }
+      }
+    }
+    return count;
+  };
+
   // Render the grid cells with random Bombs
   const renderedGrid = [];
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
+      const adjacentBombs = countAdjacentBombs(row, col);
       renderedGrid.push(
         <Cell
           key={`${row}-${col}`}
           isBomb={grid[row][col]}
+          adjacentBombs={adjacentBombs}
           handleClick={() => startGame(row, col)}
         />
       );
