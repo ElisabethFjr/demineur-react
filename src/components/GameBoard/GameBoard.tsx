@@ -1,10 +1,16 @@
+/* eslint-disable no-plusplus */
 import { useEffect, useState } from 'react';
 import { FlagFill, ChevronDown } from 'react-bootstrap-icons';
 import Button from './Button/Button';
 import Grid from './Grid/Grid';
-import { Level } from '../../@types';
+import { Cell, Level } from '../../@types';
 import styles from './GameBoard.module.scss';
-import { initializeGrid, placeRandomBombs, formatTime } from '../../utils/game';
+import {
+  initializeGrid,
+  placeRandomBombs,
+  formatTime,
+  countAdjacentBombs,
+} from '../../utils/game';
 
 // --- Levels ARRAY ---
 const levels: Level[] = [
@@ -19,7 +25,7 @@ function GameBoard() {
   const [isLevelMenuOpen, setIsLevelMenuOpen] = useState<boolean>(false);
   const [gameStatus, setGameStatus] = useState<number>(0); // 0 = waiting | 1 = start game | 2 = win | -1 = game over | 3 = restart
   const [timer, setTimer] = useState<number>(0);
-  const [grid, setGrid] = useState<boolean[][]>(
+  const [grid, setGrid] = useState<Cell[][]>(
     initializeGrid(selectedLevel.rows, selectedLevel.cols)
   );
 
@@ -59,8 +65,16 @@ function GameBoard() {
   const startGame = (rowClicked: number, colClicked: number) => {
     // Place random bombs when a cell is clicked, only if game status is 0 (waiting)
     if (gameStatus === 0) {
+      // Update the clicked cell to not be a bomb
+      const newGrid = [...grid];
+      newGrid[rowClicked][colClicked].isBomb = false;
+
+      // Update the grid with the modified cell
+      setGrid(newGrid);
+
+      // Place random bombs
       placeRandomBombs(
-        grid,
+        newGrid, // Use the updated grid
         selectedLevel.bombs,
         selectedLevel.rows,
         selectedLevel.cols,
@@ -68,8 +82,27 @@ function GameBoard() {
         colClicked,
         setGrid
       );
+
+      // Update the grid with the calculated adjacent bombs
+      for (let i = 0; i < selectedLevel.rows; i++) {
+        for (let j = 0; j < selectedLevel.cols; j++) {
+          newGrid[i][j].adjacentBombs = countAdjacentBombs(
+            i,
+            j,
+            newGrid,
+            selectedLevel.rows,
+            selectedLevel.cols
+          );
+        }
+      }
+
       // Update game status to started (1)
       setGameStatus(1);
+
+      // Revealed the first clicked Cell
+      const firstClickedCell = newGrid[rowClicked][colClicked];
+      firstClickedCell.isRevealed = true;
+      setGrid(newGrid);
     }
   };
 
@@ -129,7 +162,13 @@ function GameBoard() {
           <FlagFill color="#ec1c24" size={22} />
         </div>
       </div>
-      <Grid level={selectedLevel} grid={grid} startGame={startGame} />
+      <Grid
+        level={selectedLevel}
+        grid={grid}
+        setGrid={setGrid}
+        startGame={startGame}
+        gameStatus={gameStatus}
+      />
       <div className={styles.score}>Score</div>
       <Button resetGame={resetGame} />
     </div>

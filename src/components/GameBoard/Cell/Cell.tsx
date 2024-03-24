@@ -1,15 +1,18 @@
-import { CircleFill } from 'react-bootstrap-icons';
+import { CircleFill, FlagFill } from 'react-bootstrap-icons';
 import styles from './Cell.module.scss';
+import { Cell as CellType } from '../../../@types';
 
 function Cell({
-  isBomb,
-  adjacentBombs,
-  handleClick,
+  cell,
+  handleLeftClick,
+  handleRightClick,
 }: {
-  isBomb: boolean;
-  adjacentBombs: number;
-  handleClick: () => void;
+  cell: CellType;
+  handleLeftClick: () => void;
+  handleRightClick: () => void;
 }) {
+  const { isRevealed, isBomb, flagged, adjacentBombs } = cell;
+
   // STYLE SCSS -- Assign color based on the number of ajacentBombs
   let colorClass = ''; // Initialize color variable
   if (adjacentBombs === 1) {
@@ -30,10 +33,19 @@ function Cell({
         !isBomb && adjacentBombs !== 0 && colorClass
       }`}
       type="button"
-      onClick={handleClick}
+      onClick={handleLeftClick}
+      onContextMenu={(event) => {
+        event.preventDefault();
+        handleRightClick();
+      }}
     >
-      {isBomb && <CircleFill color="#ec1c24" />}
-      {!isBomb && adjacentBombs !== 0 && adjacentBombs}
+      {isRevealed && (
+        <>
+          {isBomb && <CircleFill color="#ec1c24" />}
+          {!isBomb && adjacentBombs !== 0 && adjacentBombs}
+        </>
+      )}
+      {flagged && <FlagFill color="#ec1c24" />}
     </button>
   );
 }
