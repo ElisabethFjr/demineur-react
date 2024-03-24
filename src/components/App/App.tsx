@@ -5,14 +5,10 @@ import './App.scss';
 
 function App() {
   // Etapes:
-
-  // 1. Gérer le style SCSS en fonction des intéractions utilisateur (case révélée/ non révélée)
-
-  // 2. Gestion des intéractions en fonction du game status:
-  // Si GAME STATUS === 1 (démarré)
-  // - Ajouter les intérations de click gauche sur les cellules => si case chiffre (nb mines adjacentes) ou case vide => afficher la case / si case bombe => perdu, GAME STATUS === -1 + dévoile toute la grille + affiche le score
-  // - Si click sur une case vide, dévoilé toutes les cases vides adjacentes + les chiffres
-  // - Ajouter les intérations de toggle click droit sur les cellules => afficher un drapeau (icon, flag, setFlag)
+  // 1. Gestion des intéractions en fonction du game status:
+  // Tant que GAME STATUS === 1 (démarré)
+  // - Si click sur cell isBomb => perdu, GAME STATUS === -1 + dévoile toute la grille + affiche le score
+  // - Faire le décompte du nb de drapeaux
   // - Si nb drapreaux = nb bombes => plus possible de poser de drapeaux
 
   // 3. Créer les composants:
