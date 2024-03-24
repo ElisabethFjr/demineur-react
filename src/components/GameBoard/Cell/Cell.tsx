@@ -29,7 +29,7 @@ function Cell({
 
   return (
     <button
-      className={`${styles.cell} ${
+      className={`${styles.cell} ${isRevealed ? styles.revealed : ''} ${
         !isBomb && adjacentBombs !== 0 && colorClass
       }`}
       type="button"

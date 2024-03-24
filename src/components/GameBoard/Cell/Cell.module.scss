@@ -9,6 +9,9 @@
   background-color: $hiddenCell;
   border: none;
   cursor: default;
+  &.revealed {
+    background-color: $revealedCell;
+  }
   &.one {
     color: $colorOne;
   }
