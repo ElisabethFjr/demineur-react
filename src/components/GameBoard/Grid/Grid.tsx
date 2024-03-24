@@ -2,6 +2,7 @@
 import Cell from '../Cell/Cell';
 import { Cell as CellType, Level } from '../../../@types';
 import styles from './Grid.module.scss';
+import { revealEmptyCells } from '../../../utils/game';
 
 function Grid({
   level,
@@ -21,9 +22,9 @@ function Grid({
   const handleLeftClick = (row: number, col: number) => {
     if (gameStatus === 0) {
       startGame(row, col);
-    } else if (gameStatus === 1) {
+    } else if (gameStatus === 1 && !grid[row][col].isRevealed) {
       const newGrid = [...grid];
-      newGrid[row][col].isRevealed = true;
+      revealEmptyCells(row, col, newGrid, rows, cols);
       setGrid(newGrid);
     }
   };

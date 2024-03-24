@@ -10,6 +10,7 @@ import {
   placeRandomBombs,
   formatTime,
   countAdjacentBombs,
+  revealEmptyCells,
 } from '../../utils/game';
 
 // --- Levels ARRAY ---
@@ -83,7 +84,7 @@ function GameBoard() {
         setGrid
       );
 
-      // Update the grid with the calculated adjacent bombs
+      // Update the grid with the count of adjacent bombs
       for (let i = 0; i < selectedLevel.rows; i++) {
         for (let j = 0; j < selectedLevel.cols; j++) {
           newGrid[i][j].adjacentBombs = countAdjacentBombs(
@@ -96,13 +97,26 @@ function GameBoard() {
         }
       }
 
-      // Update game status to started (1)
-      setGameStatus(1);
-
       // Revealed the first clicked Cell
       const firstClickedCell = newGrid[rowClicked][colClicked];
-      firstClickedCell.isRevealed = true;
+      // If the first clicked cell is not empty (adjacentBombs =! 0), reveal it
+      if (firstClickedCell.adjacentBombs) {
+        firstClickedCell.isRevealed = true;
+      } else {
+        // If the first clicked cell is empty (adjacentBombs === 0), reveal all adjacent empty cells
+        revealEmptyCells(
+          rowClicked,
+          colClicked,
+          newGrid,
+          selectedLevel.rows,
+          selectedLevel.cols
+        );
+      }
+
+      // Update the grid with the revealed cells
       setGrid(newGrid);
+      // Update game status to started (gameStatus === 1)
+      setGameStatus(1);
     }
   };
 
