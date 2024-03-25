@@ -34,23 +34,28 @@ function Grid({
 
   // --- HANDLE VICTORY ---
   useEffect(() => {
+    // If all no bombs Cells are revealed and all flags placed on the Grid (no bombs left), player WINS
     if (countFlag === 0 && checkWin(grid)) {
       setGameStatus(2); // VICTORY
-      setShowScoreModal(true);
+      setShowScoreModal(true); // Open the score modal
     }
   }, [grid, countFlag, setGameStatus, setShowScoreModal]);
 
   // --- EVENT HANDLING ---
   // Handle Left Click on a Cell (Reveal Cell)
   const handleLeftClick = (row: number, col: number) => {
+    const clickedCell = grid[row][col];
     // If game not started, start it by clicking on a Cell in the Grid
     if (gameStatus === 0) {
       startGame(row, col);
 
-      // If game has started and click on a non-revealed Cell (isRevealed === false)
-    } else if (gameStatus === 1 && !grid[row][col].isRevealed) {
+      // If game has started and click on a non-revealed and non-flag Cell
+    } else if (
+      gameStatus === 1 &&
+      !clickedCell.isRevealed &&
+      !clickedCell.flagged
+    ) {
       const newGrid = [...grid]; // Clone the grid array
-      const clickedCell = newGrid[row][col]; // Get the clicked cell
       revealClickedCell(row, col, newGrid, rows, cols); // Reveal Clicked Cell +/- Empty Adjacent Cells
       setGrid(newGrid); // Update grid state
       // If clicked cell is a bomb, end the game and reveal all cells
@@ -59,7 +64,6 @@ function Grid({
         setShowScoreModal(true);
         const revealedGrid = revealAllCells(newGrid); // Reveal all cells
         setGrid(revealedGrid); // Update grid with the revealed cells
-        // If all no bombs Cells are revealed and all flags placed on the Grid (no bombs left), player WINS
       }
     }
   };
