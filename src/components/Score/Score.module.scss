@@ -1,0 +1,33 @@
+@import '../../styles/variables';
+
+.background {
+  position: fixed;
+  z-index: 999;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .container {
+    position: relative;
+    z-index: 99;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    padding: 2rem 5rem;
+    border: 1px solid rgba(222, 223, 243, 0.5);
+    background-color: $blueDark;
+
+    .score {
+      color: $blueLight;
+      text-transform: uppercase;
+      font-weight: 700;
+      font-size: 1.5rem;
+    }
+  }
+}

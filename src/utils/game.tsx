@@ -81,7 +81,7 @@ export function countAdjacentBombs(
   return count;
 }
 
-export function revealCells(
+export function revealClickedCell(
   row: number,
   col: number,
   grid: Cell[][],
@@ -113,8 +113,8 @@ export function revealCells(
         j <= Math.min(col + 1, cols - 1);
         j++
       ) {
-        // Recursively call revealCells for each neighboring cell
-        revealCells(i, j, newGrid, rows, cols);
+        // Recursively call revealClickedCell for each neighboring cell
+        revealClickedCell(i, j, newGrid, rows, cols);
       }
     }
   }
@@ -133,6 +133,22 @@ export function revealAllCells(grid: Cell[][]) {
     })
   );
   return revealedGrid;
+}
+
+// Function to check if game is WIN
+export function checkWin(grid: Cell[][]): boolean {
+  // For each Cells
+  for (let i = 0; i < grid.length; i++) {
+    for (let j = 0; j < grid[i].length; j++) {
+      const cell = grid[i][j];
+      // If a no bomb cell is not revealed, the game is not won
+      if (!cell.isBomb && !cell.isRevealed) {
+        return false;
+      }
+    }
+  }
+  // If all no bomb cells are revealed, the game is won
+  return true;
 }
 
 // Function to convert seconds to MIN:SEC format (00:00)

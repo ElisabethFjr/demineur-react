@@ -1,8 +1,12 @@
 /* eslint-disable no-plusplus */
+import {
+  checkWin,
+  revealAllCells,
+  revealClickedCell,
+} from '../../../utils/game';
 import Cell from '../Cell/Cell';
 import { Cell as CellType, Level } from '../../../@types';
 import styles from './Grid.module.scss';
-import { revealAllCells, revealCells } from '../../../utils/game';
 
 function Grid({
   level,
@@ -13,6 +17,7 @@ function Grid({
   countFlag,
   setGameStatus,
   setCountFlag,
+  setShowScoreModal,
 }: {
   level: Level;
   grid: CellType[][];
@@ -22,6 +27,7 @@ function Grid({
   setGameStatus: React.Dispatch<React.SetStateAction<number>>;
   countFlag: number;
   setCountFlag: React.Dispatch<React.SetStateAction<number>>;
+  setShowScoreModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const { value, rows, cols } = level;
 
@@ -36,14 +42,18 @@ function Grid({
     } else if (gameStatus === 1 && !grid[row][col].isRevealed) {
       const newGrid = [...grid]; // Clone the grid array
       const clickedCell = newGrid[row][col]; // Get the clicked cell
-      revealCells(row, col, newGrid, rows, cols); // Reveal Clicked Cell +/- Empty Adjacent Cells
+      revealClickedCell(row, col, newGrid, rows, cols); // Reveal Clicked Cell +/- Empty Adjacent Cells
       setGrid(newGrid); // Update grid state
       // If clicked cell is a bomb, end the game and reveal all cells
       if (clickedCell.isBomb) {
-        setGameStatus(-1); // Game over
-        // Reveal all cells
-        const revealedGrid = revealAllCells(newGrid);
+        setGameStatus(-1); // GAME OVER
+        setShowScoreModal(true);
+        const revealedGrid = revealAllCells(newGrid); // Reveal all cells
         setGrid(revealedGrid); // Update grid with the revealed cells
+        // If all no bombs Cells are revealed and all flags placed on the Grid (no bombs left), player WINS
+      } else if (!countFlag && checkWin(newGrid)) {
+        setGameStatus(2); // VICTORY
+        setShowScoreModal(true);
       }
     }
   };

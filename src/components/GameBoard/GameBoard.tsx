@@ -3,15 +3,16 @@ import { useEffect, useState } from 'react';
 import { FlagFill, ChevronDown } from 'react-bootstrap-icons';
 import Button from './Button/Button';
 import Grid from './Grid/Grid';
-import { Cell, Level } from '../../@types';
-import styles from './GameBoard.module.scss';
+import Score from '../Score/Score';
 import {
   initializeGrid,
   placeRandomBombs,
   formatTime,
   countAdjacentBombs,
-  revealCells,
+  revealClickedCell,
 } from '../../utils/game';
+import { Cell, Level } from '../../@types';
+import styles from './GameBoard.module.scss';
 
 // --- Levels ARRAY ---
 const levels: Level[] = [
@@ -24,12 +25,15 @@ function GameBoard() {
   // --- STATES VARIABLES ---
   const [selectedLevel, setSelectedLevel] = useState<Level>(levels[0]);
   const [isLevelMenuOpen, setIsLevelMenuOpen] = useState<boolean>(false);
-  const [gameStatus, setGameStatus] = useState<number>(0); // 0 = waiting | 1 = start game | 2 = win | -1 = game over | 3 = restart
+  const [gameStatus, setGameStatus] = useState<number>(0); // 0 = waiting | 1 = start game | 2 = win | -1 = game over
   const [timer, setTimer] = useState<number>(0);
+  const [countFlag, setCountFlag] = useState<number>(selectedLevel.bombs);
   const [grid, setGrid] = useState<Cell[][]>(
     initializeGrid(selectedLevel.rows, selectedLevel.cols)
   );
-  const [countFlag, setCountFlag] = useState<number>(selectedLevel.bombs);
+  const [showScoreModal, setShowScoreModal] = useState<boolean>(false);
+  console.log('showScoreModal', showScoreModal);
+  console.log('gameStatus', gameStatus);
 
   // --- TIMER ---
   // Controls the game timer based on the game status
@@ -83,7 +87,7 @@ function GameBoard() {
       }
 
       // Reveal the clicked Cell +/- All adjacent empty cells
-      revealCells(
+      revealClickedCell(
         rowClicked,
         colClicked,
         newGrid,
@@ -108,6 +112,10 @@ function GameBoard() {
     setGrid(initializeGrid(rows, cols));
     // Reset Timer
     setTimer(0);
+    // If showScoreModal === true, close the modal
+    if (showScoreModal) {
+      setShowScoreModal(false);
+    }
   };
 
   // --- EVENT HANDLING ---
@@ -124,69 +132,78 @@ function GameBoard() {
   };
 
   return (
-    <div className={styles.gameboard}>
-      <div className={styles.header}>
-        <div className={styles.selector}>
-          <button
-            type="button"
-            className={styles.level}
-            onClick={handleToggleLevelMenu}
-          >
-            <p>{selectedLevel.value}</p>
-            <ChevronDown color="#dedff3" />
-          </button>
-          <ul
-            className={`${styles.options} ${
-              isLevelMenuOpen ? styles.open : ''
-            }`}
-          >
-            {levels.map((level) => (
-              <li
-                className={`${styles.option} ${
-                  level.value === selectedLevel.value ? styles.selected : ''
-                }`}
-                key={level.value}
-              >
-                <input
-                  className={styles.input}
-                  type="radio"
-                  id={level.value}
-                  name="level"
-                  value={level.value}
-                  checked={selectedLevel.value === level.value}
-                  onChange={() => handleLevelChange(level)}
-                />
-                <label className={styles.label} htmlFor={level.value}>
-                  {level.value}
-                </label>
-              </li>
-            ))}
-          </ul>
+    <>
+      <div className={styles.gameboard}>
+        <div className={styles.header}>
+          <div className={styles.selector}>
+            <button
+              type="button"
+              className={styles.level}
+              onClick={handleToggleLevelMenu}
+            >
+              <p>{selectedLevel.value}</p>
+              <ChevronDown color="#dedff3" />
+            </button>
+            <ul
+              className={`${styles.options} ${
+                isLevelMenuOpen ? styles.open : ''
+              }`}
+            >
+              {levels.map((level) => (
+                <li
+                  className={`${styles.option} ${
+                    level.value === selectedLevel.value ? styles.selected : ''
+                  }`}
+                  key={level.value}
+                >
+                  <input
+                    className={styles.input}
+                    type="radio"
+                    id={level.value}
+                    name="level"
+                    value={level.value}
+                    checked={selectedLevel.value === level.value}
+                    onChange={() => handleLevelChange(level)}
+                  />
+                  <label className={styles.label} htmlFor={level.value}>
+                    {level.value}
+                  </label>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className={styles.timer}>{formatTime(timer)}</div>
+          <div className={styles.counter}>
+            <p>{countFlag}</p>
+            <FlagFill color="#ec1c24" size={22} />
+          </div>
         </div>
-        <div className={styles.timer}>{formatTime(timer)}</div>
-        <div className={styles.counter}>
-          <p>{countFlag}</p>
-          <FlagFill color="#ec1c24" size={22} />
-        </div>
+        <Grid
+          level={selectedLevel}
+          grid={grid}
+          setGrid={setGrid}
+          startGame={startGame}
+          gameStatus={gameStatus}
+          setGameStatus={setGameStatus}
+          countFlag={countFlag}
+          setCountFlag={setCountFlag}
+          setShowScoreModal={setShowScoreModal}
+        />
+        <div className={styles.score}>Score</div>
+        <Button
+          text="Reset"
+          selectedLevel={selectedLevel}
+          resetGame={resetGame}
+        />
       </div>
-      <Grid
-        level={selectedLevel}
-        grid={grid}
-        setGrid={setGrid}
-        startGame={startGame}
-        gameStatus={gameStatus}
-        setGameStatus={setGameStatus}
-        countFlag={countFlag}
-        setCountFlag={setCountFlag}
-      />
-      <div className={styles.score}>Score</div>
-      <Button
-        bombs={selectedLevel.bombs}
-        rows={selectedLevel.rows}
-        cols={selectedLevel.cols}
-        resetGame={resetGame}
-      />
-    </div>
+      {showScoreModal && (
+        <Score
+          gameStatus={gameStatus}
+          selectedLevel={selectedLevel}
+          resetGame={resetGame}
+        />
+      )}
+    </>
   );
 }
 

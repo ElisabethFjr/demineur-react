@@ -1,16 +1,17 @@
+import { Level } from '../../../@types';
 import styles from './Button.module.scss';
 
 function Button({
-  bombs,
-  rows,
-  cols,
+  text,
+  selectedLevel,
   resetGame,
 }: {
-  bombs: number;
-  rows: number;
-  cols: number;
+  text: string;
+  selectedLevel: Level;
   resetGame: (bombs: number, rows: number, cols: number) => void;
 }) {
+  const { bombs, rows, cols } = selectedLevel;
+
   return (
     <div className={styles.container}>
       <button
@@ -18,7 +19,7 @@ function Button({
         className={styles.btn}
         onClick={() => resetGame(bombs, rows, cols)}
       >
-        Reset
+        {text}
       </button>
     </div>
   );
