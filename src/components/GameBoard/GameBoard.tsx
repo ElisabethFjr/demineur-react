@@ -32,8 +32,6 @@ function GameBoard() {
     initializeGrid(selectedLevel.rows, selectedLevel.cols)
   );
   const [showScoreModal, setShowScoreModal] = useState<boolean>(false);
-  console.log('showScoreModal', showScoreModal);
-  console.log('gameStatus', gameStatus);
 
   // --- TIMER ---
   // Controls the game timer based on the game status
@@ -196,13 +194,13 @@ function GameBoard() {
           resetGame={resetGame}
         />
       </div>
-      {showScoreModal && (
-        <Score
-          gameStatus={gameStatus}
-          selectedLevel={selectedLevel}
-          resetGame={resetGame}
-        />
-      )}
+      {/* {showScoreModal && ( */}
+      <Score
+        gameStatus={gameStatus}
+        selectedLevel={selectedLevel}
+        resetGame={resetGame}
+      />
+      {/* )} */}
     </>
   );
 }
