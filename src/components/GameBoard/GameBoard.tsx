@@ -10,7 +10,7 @@ import {
   placeRandomBombs,
   formatTime,
   countAdjacentBombs,
-  revealEmptyCells,
+  revealCells,
 } from '../../utils/game';
 
 // --- Levels ARRAY ---
@@ -29,22 +29,7 @@ function GameBoard() {
   const [grid, setGrid] = useState<Cell[][]>(
     initializeGrid(selectedLevel.rows, selectedLevel.cols)
   );
-
-  // --- EVENT HANDLING ---
-  // Toggle the Select Level Menu on Click
-  const handleToggleLevelMenu = () => {
-    setIsLevelMenuOpen(!isLevelMenuOpen);
-  };
-
-  // Change the level value on Click
-  const handleLevelChange = (level: Level) => {
-    setSelectedLevel(level);
-    setIsLevelMenuOpen(false);
-    // Reset game status to waiting (0)
-    setGameStatus(0);
-    // Reset the grid to empty without bombs
-    setGrid(initializeGrid(level.rows, level.cols));
-  };
+  const [countFlag, setCountFlag] = useState<number>(selectedLevel.bombs);
 
   // --- TIMER ---
   // Controls the game timer based on the game status
@@ -54,14 +39,14 @@ function GameBoard() {
       intervalId = setInterval(() => {
         setTimer((prevTimer) => prevTimer + 1); // Increment the timer by 1 second
       }, 1000); // Timer interval set to 1000 milliseconds (1 second)
-    } else if (gameStatus === -1 || gameStatus === 2 || gameStatus === 3) {
+    } else {
       clearInterval(intervalId); // Clear the interval to stop the timer
     }
     // Cleanup function to clear the interval when the component unmounts or when game status changes
     return () => clearInterval(intervalId);
   }, [gameStatus]);
 
-  // --- GAME FUNTIONS ---
+  // --- GAME FUNCTIONS ---
   // Function to start the game when a cell is clicked
   const startGame = (rowClicked: number, colClicked: number) => {
     // Place random bombs when a cell is clicked, only if game status is 0 (waiting)
@@ -97,21 +82,14 @@ function GameBoard() {
         }
       }
 
-      // Revealed the first clicked Cell
-      const firstClickedCell = newGrid[rowClicked][colClicked];
-      // If the first clicked cell is not empty (adjacentBombs =! 0), reveal it
-      if (firstClickedCell.adjacentBombs) {
-        firstClickedCell.isRevealed = true;
-      } else {
-        // If the first clicked cell is empty (adjacentBombs === 0), reveal all adjacent empty cells
-        revealEmptyCells(
-          rowClicked,
-          colClicked,
-          newGrid,
-          selectedLevel.rows,
-          selectedLevel.cols
-        );
-      }
+      // Reveal the clicked Cell +/- All adjacent empty cells
+      revealCells(
+        rowClicked,
+        colClicked,
+        newGrid,
+        selectedLevel.rows,
+        selectedLevel.cols
+      );
 
       // Update the grid with the revealed cells
       setGrid(newGrid);
@@ -122,12 +100,27 @@ function GameBoard() {
 
   // Function to reset the game
   const resetGame = () => {
+    // Reset count Flag
+    setCountFlag(selectedLevel.bombs);
     // Reset game status to waiting (0)
     setGameStatus(0);
     // Reset the grid to empty without bombs
     setGrid(initializeGrid(selectedLevel.rows, selectedLevel.cols));
     // Reset Timer
     setTimer(0);
+  };
+
+  // --- EVENT HANDLING ---
+  // Toggle the Select Level Menu on Click
+  const handleToggleLevelMenu = () => {
+    setIsLevelMenuOpen(!isLevelMenuOpen);
+  };
+
+  // Change the level value on Click
+  const handleLevelChange = (level: Level) => {
+    setSelectedLevel(level); // Update Level
+    setIsLevelMenuOpen(false); // Close Level Menu
+    resetGame(); // Reset game
   };
 
   return (
@@ -172,7 +165,7 @@ function GameBoard() {
         </div>
         <div className={styles.timer}>{formatTime(timer)}</div>
         <div className={styles.counter}>
-          <p>{selectedLevel.bombs}</p>
+          <p>{countFlag}</p>
           <FlagFill color="#ec1c24" size={22} />
         </div>
       </div>
@@ -182,6 +175,8 @@ function GameBoard() {
         setGrid={setGrid}
         startGame={startGame}
         gameStatus={gameStatus}
+        countFlag={countFlag}
+        setCountFlag={setCountFlag}
       />
       <div className={styles.score}>Score</div>
       <Button resetGame={resetGame} />

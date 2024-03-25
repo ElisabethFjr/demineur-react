@@ -82,15 +82,13 @@ export function countAdjacentBombs(
   return count;
 }
 
-// Function display and reveal all Cells with no adjacent Bombs
-export function revealEmptyCells(
+export function revealCells(
   row: number,
   col: number,
   grid: Cell[][],
   rows: number,
   cols: number
 ) {
-  // Check if the cell is within bounds
   if (
     row < 0 ||
     row >= rows ||
@@ -104,14 +102,15 @@ export function revealEmptyCells(
   // Create a deep copy of the grid
   const newGrid = grid.map((rowArray) => [...rowArray]);
 
-  // Set the cell as revealed
+  // Set the current cell as revealed
   newGrid[row][col].isRevealed = true;
 
-  // If the cell has no adjacent bombs, reveal adjacent cells recursively
+  // If the current cell has no adjacent bombs, reveal adjacent cells recursively
   if (newGrid[row][col].adjacentBombs === 0) {
     for (let i = row - 1; i <= row + 1; i++) {
       for (let j = col - 1; j <= col + 1; j++) {
-        revealEmptyCells(i, j, newGrid, rows, cols);
+        // Recursively call revealCells for each neighboring cell
+        revealCells(i, j, newGrid, rows, cols);
       }
     }
   }
