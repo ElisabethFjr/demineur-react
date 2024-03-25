@@ -4,11 +4,9 @@ import Header from '../Header/Header';
 import './App.scss';
 
 function App() {
-  // 1. Créer les composants:
-  // - Score : Donne le resultats final (succès/echec, temps)
-  // - Afficher le score : temps et à côté les meilleurs scores effectués (ccréer un tableau de score vide et ajouter les scores à chaque fois qu'une game est gagnée)
+  // 2. Attention, si drapeau dans la Cell on ne peux pas clique gauche dessus
 
-  // 2. Gestion victoire : si toutes les cases non minées sont affichéees + nb drapeaux === nb mines alors VICTOIRE GAME STATUS === 3 (gagné)
+  // 3. Fix bug: lorsque je pose le dernier drapeau + toutes les cells no bombs revealed ça ne termine pas la game
 
   return (
     <div className="app">

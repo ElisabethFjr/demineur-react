@@ -147,10 +147,9 @@ export function checkWin(grid: Cell[][]): boolean {
       }
     }
   }
-  // If all no bomb cells are revealed, the game is won
+  // If all non-bomb cells are revealed and countFlag equals 0, the game is won
   return true;
 }
-
 // Function to convert seconds to MIN:SEC format (00:00)
 export function formatTime(time: number): string {
   const min = Math.floor(time / 60);

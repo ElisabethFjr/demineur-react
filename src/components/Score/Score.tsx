@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import Button from '../GameBoard/Button/Button';
 import { Level } from '../../@types';
 import clock from '../../assets/images/score.png';
-import medal from '../../assets/images/top-score.png';
 import styles from './Score.module.scss';
 
 function Score({
@@ -18,39 +17,33 @@ function Score({
 }) {
   const { bombs, rows, cols } = selectedLevel;
   const [status, setStatus] = useState<string>('');
+  const [score, setScore] = useState<string>('');
 
   useEffect(() => {
     if (gameStatus === -1) {
       setStatus('Game Over !');
     } else if (gameStatus === 2) {
       setStatus('Victoire !');
+      setScore(timer);
     }
-  }, [gameStatus]);
+  }, [gameStatus, timer]);
 
   return (
     <div className={styles.background}>
       <div className={styles.container}>
         <p className={styles.status}>{status}</p>
-        <div className={styles.score}>
-          <div className={styles.time}>
+        {gameStatus === 2 && (
+          <div className={styles.score}>
             <img
               className={styles.img}
               src={clock}
               alt="Score"
               loading="lazy"
             />
-            <p className={styles.text}>{timer}</p>
+            <p className={styles.text}>{score}</p>
           </div>
-          <div className={styles.top}>
-            <img
-              className={styles.text}
-              src={medal}
-              alt="Top Score"
-              loading="lazy"
-            />
-            <p>Top Score</p>
-          </div>
-        </div>
+        )}
+
         <Button
           text="Rejouer ?"
           selectedLevel={selectedLevel}

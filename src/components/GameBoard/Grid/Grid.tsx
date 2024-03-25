@@ -1,4 +1,5 @@
 /* eslint-disable no-plusplus */
+import { useEffect } from 'react';
 import {
   checkWin,
   revealAllCells,
@@ -31,6 +32,14 @@ function Grid({
 }) {
   const { value, rows, cols } = level;
 
+  // --- HANDLE VICTORY ---
+  useEffect(() => {
+    if (countFlag === 0 && checkWin(grid)) {
+      setGameStatus(2); // VICTORY
+      setShowScoreModal(true);
+    }
+  }, [grid, countFlag, setGameStatus, setShowScoreModal]);
+
   // --- EVENT HANDLING ---
   // Handle Left Click on a Cell (Reveal Cell)
   const handleLeftClick = (row: number, col: number) => {
@@ -51,9 +60,6 @@ function Grid({
         const revealedGrid = revealAllCells(newGrid); // Reveal all cells
         setGrid(revealedGrid); // Update grid with the revealed cells
         // If all no bombs Cells are revealed and all flags placed on the Grid (no bombs left), player WINS
-      } else if (!countFlag && checkWin(newGrid)) {
-        setGameStatus(2); // VICTORY
-        setShowScoreModal(true);
       }
     }
   };
