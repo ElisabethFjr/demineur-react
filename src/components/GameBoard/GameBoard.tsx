@@ -99,9 +99,9 @@ function GameBoard() {
   };
 
   // Function to reset the game
-  const resetGame = (rows: number, cols: number) => {
+  const resetGame = (bombs: number, rows: number, cols: number) => {
     // Reset count Flag
-    setCountFlag(selectedLevel.bombs);
+    setCountFlag(bombs);
     // Reset game status to waiting (0)
     setGameStatus(0);
     // Reset the grid to empty without bombs
@@ -120,7 +120,7 @@ function GameBoard() {
   const handleLevelChange = (level: Level) => {
     setSelectedLevel(level); // Update Level
     setIsLevelMenuOpen(false); // Close Level Menu
-    resetGame(level.rows, level.cols); // Reset game
+    resetGame(level.bombs, level.rows, level.cols); // Reset game
   };
 
   return (
@@ -175,11 +175,13 @@ function GameBoard() {
         setGrid={setGrid}
         startGame={startGame}
         gameStatus={gameStatus}
+        setGameStatus={setGameStatus}
         countFlag={countFlag}
         setCountFlag={setCountFlag}
       />
       <div className={styles.score}>Score</div>
       <Button
+        bombs={selectedLevel.bombs}
         rows={selectedLevel.rows}
         cols={selectedLevel.cols}
         resetGame={resetGame}

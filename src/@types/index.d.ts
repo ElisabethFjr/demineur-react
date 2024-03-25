@@ -12,5 +12,4 @@ export type Cell = {
   adjacentBombs: number;
   flagged: boolean;
   isRevealed: boolean;
-  bombClicked: boolean;
 };

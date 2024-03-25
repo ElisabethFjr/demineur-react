@@ -8,8 +8,6 @@ function App() {
   // 1. Gestion des intéractions en fonction du game status:
   // Tant que GAME STATUS === 1 (démarré)
   // - Si click sur cell isBomb => perdu, GAME STATUS === -1 + dévoile toute la grille + affiche le score
-  // - Faire le décompte du nb de drapeaux
-  // - Si nb drapreaux = nb bombes => plus possible de poser de drapeaux
 
   // 3. Créer les composants:
   // - Score : Donne le resultats final (succès/echec, temps)

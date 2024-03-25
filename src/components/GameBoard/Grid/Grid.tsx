@@ -2,7 +2,7 @@
 import Cell from '../Cell/Cell';
 import { Cell as CellType, Level } from '../../../@types';
 import styles from './Grid.module.scss';
-import { revealCells } from '../../../utils/game';
+import { revealAllCells, revealCells } from '../../../utils/game';
 
 function Grid({
   level,
@@ -11,6 +11,7 @@ function Grid({
   startGame,
   gameStatus,
   countFlag,
+  setGameStatus,
   setCountFlag,
 }: {
   level: Level;
@@ -18,6 +19,7 @@ function Grid({
   setGrid: React.Dispatch<React.SetStateAction<CellType[][]>>;
   startGame: (rowClicked: number, colClicked: number) => void;
   gameStatus: number;
+  setGameStatus: React.Dispatch<React.SetStateAction<number>>;
   countFlag: number;
   setCountFlag: React.Dispatch<React.SetStateAction<number>>;
 }) {
@@ -29,11 +31,20 @@ function Grid({
     // If game not started, start it by clicking on a Cell in the Grid
     if (gameStatus === 0) {
       startGame(row, col);
+
       // If game has started and click on a non-revealed Cell (isRevealed === false)
     } else if (gameStatus === 1 && !grid[row][col].isRevealed) {
       const newGrid = [...grid]; // Clone the grid array
+      const clickedCell = newGrid[row][col]; // Get the clicked cell
       revealCells(row, col, newGrid, rows, cols); // Reveal Clicked Cell +/- Empty Adjacent Cells
       setGrid(newGrid); // Update grid state
+      // If clicked cell is a bomb, end the game and reveal all cells
+      if (clickedCell.isBomb) {
+        setGameStatus(-1); // Game over
+        // Reveal all cells
+        const revealedGrid = revealAllCells(newGrid);
+        setGrid(revealedGrid); // Update grid with the revealed cells
+      }
     }
   };
 

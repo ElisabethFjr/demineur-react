@@ -13,7 +13,6 @@ export function initializeGrid(rows: number, cols: number): Cell[][] {
         isBomb: false, // Initialize all cells as non-bomb
         flagged: false, // Initialize all cells as unflagged
         isRevealed: false, // Initialize all cells as unrevealed
-        bombClicked: false, // Initialize all cells as not clicked bomb
         adjacentBombs: 0, // Initialize the nb of adjacent bombs to 0
       };
     }
@@ -114,6 +113,21 @@ export function revealCells(
       }
     }
   }
+}
+
+// Function to reveal All Cells when Game is over (gameStatus === -1)
+export function revealAllCells(grid: Cell[][]) {
+  // For each cell, reveal it and reset the flag
+  const revealedGrid = grid.map((row) =>
+    row.map((cell) => {
+      return {
+        ...cell,
+        isRevealed: true,
+        flagged: false,
+      };
+    })
+  );
+  return revealedGrid;
 }
 
 // Function to convert seconds to MIN:SEC format (00:00)
