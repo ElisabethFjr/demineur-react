@@ -15,7 +15,7 @@
   }
   // Level value 'difficile'
   &.difficile {
-    grid-template-columns: repeat(30, 30px);
-    grid-template-rows: repeat(16, 30px);
+    grid-template-columns: repeat(24, 24px);
+    grid-template-rows: repeat(24, 24px);
   }
 }

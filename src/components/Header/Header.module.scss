@@ -2,9 +2,10 @@
 
 .header {
   display: flex;
+  justify-content: center;
   align-items: center;
-  height: 9rem;
-  margin-bottom: 2rem;
+  margin: 2rem;
+  width: 100%;
   .title {
     font-family: 'Press Start 2P';
     color: $blueLight;

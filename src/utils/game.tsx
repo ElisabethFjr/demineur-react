@@ -100,14 +100,19 @@ export function revealCells(
 
   // Create a deep copy of the grid
   const newGrid = grid.map((rowArray) => [...rowArray]);
+  const currentCell = newGrid[row][col];
 
   // Set the current cell as revealed
-  newGrid[row][col].isRevealed = true;
+  currentCell.isRevealed = true;
 
   // If the current cell has no adjacent bombs, reveal adjacent cells recursively
-  if (newGrid[row][col].adjacentBombs === 0) {
-    for (let i = row - 1; i <= row + 1; i++) {
-      for (let j = col - 1; j <= col + 1; j++) {
+  if (currentCell.adjacentBombs === 0) {
+    for (let i = Math.max(0, row - 1); i <= Math.min(row + 1, rows - 1); i++) {
+      for (
+        let j = Math.max(0, col - 1);
+        j <= Math.min(col + 1, cols - 1);
+        j++
+      ) {
         // Recursively call revealCells for each neighboring cell
         revealCells(i, j, newGrid, rows, cols);
       }

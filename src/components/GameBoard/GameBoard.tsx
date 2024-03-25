@@ -17,7 +17,7 @@ import {
 const levels: Level[] = [
   { value: 'facile', rows: 9, cols: 9, bombs: 10 },
   { value: 'moyen', rows: 16, cols: 16, bombs: 40 },
-  { value: 'difficile', rows: 30, cols: 16, bombs: 99 },
+  { value: 'difficile', rows: 24, cols: 24, bombs: 99 },
 ];
 
 function GameBoard() {
