@@ -1,9 +1,21 @@
 import styles from './Button.module.scss';
 
-function Button({ resetGame }: { resetGame: () => void }) {
+function Button({
+  rows,
+  cols,
+  resetGame,
+}: {
+  rows: number;
+  cols: number;
+  resetGame: (rows: number, cols: number) => void;
+}) {
   return (
     <div className={styles.container}>
-      <button type="button" className={styles.btn} onClick={resetGame}>
+      <button
+        type="button"
+        className={styles.btn}
+        onClick={() => resetGame(rows, cols)}
+      >
         Reset
       </button>
     </div>

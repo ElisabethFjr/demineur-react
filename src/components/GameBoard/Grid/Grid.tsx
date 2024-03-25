@@ -39,6 +39,7 @@ function Grid({
 
   // Handle Right Click on a Cell (Flag)
   const handleRightClick = (row: number, col: number) => {
+    // If game started
     if (gameStatus === 1) {
       // Toggle flag on the Cell
       const newGrid = [...grid]; // Clone the grid array
