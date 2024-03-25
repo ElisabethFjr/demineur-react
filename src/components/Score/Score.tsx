@@ -9,10 +9,12 @@ function Score({
   gameStatus,
   selectedLevel,
   resetGame,
+  timer,
 }: {
   gameStatus: number;
   selectedLevel: Level;
   resetGame: (bombs: number, rows: number, cols: number) => void;
+  timer: string;
 }) {
   const { bombs, rows, cols } = selectedLevel;
   const [status, setStatus] = useState<string>('');
@@ -37,7 +39,7 @@ function Score({
               alt="Score"
               loading="lazy"
             />
-            <p className={styles.text}>Score Time</p>
+            <p className={styles.text}>{timer}</p>
           </div>
           <div className={styles.top}>
             <img

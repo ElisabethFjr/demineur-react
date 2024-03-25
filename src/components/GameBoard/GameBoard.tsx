@@ -194,13 +194,14 @@ function GameBoard() {
           resetGame={resetGame}
         />
       </div>
-      {/* {showScoreModal && ( */}
-      <Score
-        gameStatus={gameStatus}
-        selectedLevel={selectedLevel}
-        resetGame={resetGame}
-      />
-      {/* )} */}
+      {showScoreModal && (
+        <Score
+          gameStatus={gameStatus}
+          selectedLevel={selectedLevel}
+          resetGame={resetGame}
+          timer={formatTime(timer)}
+        />
+      )}
     </>
   );
 }
